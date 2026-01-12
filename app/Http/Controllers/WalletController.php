@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Currency;
+use App\Models\Transaction;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,13 @@ class WalletController extends Controller
      */
     public function index()
     {
-        //
+     $user = Auth::user();
+
+$wallets = Wallet::where('user_id', $user->id)
+    ->withSum('transaction as balance', 'amount')
+    ->get();
+
+return response()->json($wallets);
     }
 
     /**
@@ -57,9 +64,26 @@ class WalletController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Wallet $wallet)
+    public function show($walletId)
     {
-        //
+        $wallet = Wallet::find($walletId)->loadSum('transaction as balance', 'amount');
+        $user = Auth::user();
+        if(!$wallet) {
+            return response()->json([
+                "message" => "not found"
+            ], 404);
+        }
+        
+        if ($wallet->user_id !== $user->id) {
+            return response()->json([
+                "message" => "forbiden"
+            ], 403);
+        }
+        else {
+        return response()->json($wallet);
+            
+        }
+        
     }
 
     /**
@@ -123,6 +147,7 @@ class WalletController extends Controller
     {
         
         $wallet = Wallet::find($walletId);
+        
         $user = Auth::user();
         
         if (!$wallet) {

@@ -25,5 +25,11 @@ Route::post('/wallets', [WalletController::class, 'store']);
 Route::put('/wallets/{walletId}', [WalletController::class, 'update']);
 Route::delete('/wallets/{walletId}', [WalletController::class, 'destroy']);
 Route::post('/transactions', [TransactionController::class, 'store']);
+Route::delete('/transactions/{transactionId}', [TransactionController::class, 'destroy']);
+Route::get('/transactions', [TransactionController::class, 'index']);
+Route::get('/wallets', [WalletController::class, 'index']);
+Route::get('/wallets/{walletId}', [WalletController::class, 'show']);
+Route::get('/reports/summary-by-category/expense', [TransactionController::class, 'get']);
+Route::get('/reports/summary-by-category/income', [TransactionController::class, 'getIncome']);
      
 });
