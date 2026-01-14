@@ -98,7 +98,7 @@ class TransactionController extends Controller
         $data =  $request->validate([
             "wallet_id" => "required|exists:wallets,id",
             "category_id" => "required|exists:categories,id",
-            "amount" => "required|integer",
+            "amount" => "required|numeric",
             "date" => "required|date",
             "note" => "nullable"
 
@@ -112,6 +112,10 @@ class TransactionController extends Controller
 
         if ($operator->type === "EXPENSE") {
             $jumlahAkhir =  $request->amount - $request->amount * 2;
+        }
+        
+             if ($operator->type === "INCOME") {
+            $jumlahAkhir =  $request->amount;
         }
 
 
