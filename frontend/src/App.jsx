@@ -7,6 +7,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
 import Overview from './pages/Overview'
 import Register from './pages/Register'
+import ProtectedRoute from './components/ProtectedRoute'
+import ProtectedLogin from './components/ProtectedLogin'
+import Navbar from './components/Navbar'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,10 +19,11 @@ function App() {
     
     
     <BrowserRouter>
+    <Navbar/>
       <Routes>
-        <Route path='/login' element={<Login/>} />
-        <Route path='/' element={<Overview/>} />
-        <Route path='/register' element={<Register/>} />
+        <Route path='/login' element={ <ProtectedLogin> <Login/></ProtectedLogin> } />
+        <Route path='/' element={<ProtectedRoute> <Overview/></ProtectedRoute>} />
+        <Route path='/register' element={<ProtectedLogin> <Register/></ProtectedLogin> } />
       </Routes>
     </BrowserRouter>
     
